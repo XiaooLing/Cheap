@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    box-sizing: border-box; /* Ensures consistent width calculations */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #111;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #ff69b4;
+}
+
+.bc {
+    background-color: #111;
+    color: #ff69b4; /* Glowing pink */
+    padding: 0;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 1.69189282px rgba(255, 105, 180);
+    position: relative;
+    width: 90vw;
+    height: 100px;
+    box-sizing: border-box; /* Ensures padding/border don’t add extra width */
+    
+    /* Centering properties */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.box {
+    background-color: #111;
+    color: #ff69b4; /* Glowing pink */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0);
+    height: 64px;
+    width: inherit; /* Inherits the width of .bc */
+    padding: 10px;
+    box-sizing: border-box; /* Keeps padding/border within the set width */
+
+    /* Centering properties */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    /* Text wrapping properties */
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    font-family: monospace;
+    
+    /* Positioning at bottom of .bc */
+    position: absolute;
+    bottom: 0;
+}
+
+.copy-button {
+    margin: 0;
+    padding: 5px 10px;
+    background-color: #ff69b4; /* Glowing pink */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
