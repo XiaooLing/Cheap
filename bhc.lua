@@ -374,4 +374,8 @@ end
 if input:sub(1,4) == "/ap " then
 ap = ExactText:sub(5)
 end
+
+if input == "/dh" then
+historys[SenderName] = ""
+end
 end)
