@@ -1,7 +1,5 @@
-function copyText(id) {
-  const textBox = document.getElementById(id);
-  const text = textBox.innerText.replace('Copy', ''); // Remove the button text
-  navigator.clipboard.writeText(text)
+function copyText(txt) {
+  navigator.clipboard.writeText(txt)
     .then(() => {
       alert('Text copied to clipboard!');
     })
