@@ -21,58 +21,63 @@ h1 {
 
 .bc {
     background-color: #111;
-    color: #ff69b4; /* Glowing pink */
-    padding: 0;
+    color: #ff69b4;
+    padding: 10px;
     border-radius: 5px;
-    box-shadow: 0 0 5px 1.69189282px rgba(255, 105, 180);
+    box-shadow: 0 0 5px 1.69px rgba(255, 105, 180);
     position: relative;
     width: 90vw;
-    height: 100px;
-    box-sizing: border-box; /* Ensures padding/border don’t add extra width */
-    
-    /* Centering properties */
+    min-height: 100px; /* Allows container to expand */
+    box-sizing: border-box;
+
+    /* Flexbox to align multiple boxes properly */
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Stacks from top */
     text-align: center;
+    gap: 5px; /* Adds spacing between elements */
 }
 
 .box {
     background-color: #111;
-    color: #ff69b4; /* Glowing pink */
+    color: #ff69b4;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(255, 105, 180, 0);
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
     height: 64px;
-    width: inherit; /* Inherits the width of .bc */
+    width: 100%;
     padding: 10px;
-    box-sizing: border-box; /* Keeps padding/border within the set width */
+    box-sizing: border-box;
 
-    /* Centering properties */
+    /* Centering */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
 
-    /* Text wrapping properties */
+    /* Text wrapping */
     word-wrap: break-word;
     word-break: break-all;
     overflow-wrap: break-word;
     font-family: monospace;
-    
-    /* Positioning at bottom of .bc */
-    position: absolute;
-    bottom: 0;
 }
 
 .copy-button {
-    margin: 0;
+    margin: 5px;
     padding: 5px 10px;
-    background-color: #ff69b4; /* Glowing pink */
+    background-color: #ff69b4;
     color: #fff;
     border: none;
     border-radius: 5px;
-    position: absolute;
-    top: 0;
-    right: 0;
     cursor: pointer;
 }
+
+.add-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #ff69b4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
