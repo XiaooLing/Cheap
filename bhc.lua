@@ -197,6 +197,9 @@ return data["response"]
     end
 end
 
+local an = "Fez"
+local ap = "talk less and straight to point"
+
 TextChannel.MessageReceived:Connect(function(input)
 local SenderName = input.TextSource.Name
 local ExactText = input.Text
@@ -342,8 +345,6 @@ local args = {
     end
 end
 
-local an = "Fez"
-local ap = "talk less and straight to point"
 if input:sub(1,4) =="/ai " then
 if not historys[SenderName] then
 historys[SenderName] = ""
