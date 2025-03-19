@@ -260,8 +260,8 @@ local args = {
 game:GetService("ReplicatedStorage").RE:FindFirstChild("1Avata1rOrigina1l"):FireServer(unpack(args))
 end
 
-if SenderName == UserName and input:sub(1,3) == "/g " then
-local target = ExactText:sub(4)
+if SenderName == UserName and input:sub(1,11) == "/giveacces " then
+local target = ExactText:sub(12)
 if game.Players[target] then
 table.insert(players, target)
 TextChannel:SendAsync(convertToFullWidth("Gaved Acces To : " .. target))
@@ -342,13 +342,15 @@ local args = {
     end
 end
 
+local an = "Fez"
+local ap = "talk less and straight to point"
 if input:sub(1,4) =="/ai " then
 if not historys[SenderName] then
 historys[SenderName] = ""
 end
-local res = res("your name is fez, talk less within 100 characters and straight to point, Here is conversation History: " .. historys[SenderName],input:sub(5))
+local res = res("your name is " .. an .. ", " .. ap .. ", Here is conversation History: " .. historys[SenderName],input:sub(5))
 TextChannel:SendAsync(res)
-if select(2, historys[SenderName]:gsub("\n", "")) > 5 then
+if select(2, historys[SenderName]:gsub("\n", "")) > 10 then
 historys[SenderName] = historys[SenderName]:gsub("^[^\n]*\n[^\n]*\n", "", 1)
 end
 
@@ -362,5 +364,13 @@ if string.match(i.Name, "BannedBlock") then
 i:Destroy()
 end
 end
+end
+
+if input:sub(1,4) == "/an " then
+an = ExactText:sub(5)
+end
+
+if input:sub(1,4) == "/ap " then
+ap = ExactText:sub(5)
 end
 end)
