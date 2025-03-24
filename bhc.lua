@@ -47,57 +47,84 @@ for _, player in pairs(game:GetService("Players"):GetPlayers()) do
 end
 end
 
-local function bundle(number)
+local function bundle(i)
     local HttpService = game:GetService("HttpService")
+    local url
 
-local function Request()
-    local success, Response = pcall(function()
-        return game:HttpGetAsync("https://catalog.roblox.com/v1/bundles/" .. number .. "/details")
-    end)
-    if not success then
-        task.wait(10)
-        return Request()
+    if tonumber(i) then
+        url = "https://catalog.roblox.com/v1/bundles/" .. i .. "/details"
+    else
+        url = "https://catalog.roblox.com/v1/search/items?Category=Characters&Keyword=" .. HttpService:UrlEncode(i)
     end
-    return Response
-end
 
-local Response = Request()
-local Body = HttpService:JSONDecode(Response)
+    local function Request()
+        local success, Response = pcall(function()
+            return game:HttpGetAsync(url)
+        end)
+        if not success then
+            task.wait(10)
+            return Request()
+        end
+        return Response
+    end
 
--- Initialize a table to store the item IDs in the specified order
-local bundleParts = {1, 1, 1, 1, 1, 1}
+    local Response = Request()
+    local Body = HttpService:JSONDecode(Response)
 
--- Populate the bundleParts table with item IDs based on item types
-if Body.items then
-    for _, item in ipairs(Body.items) do
-        local itemName = item.name:lower()
-        if itemName:find("torso") then
-            bundleParts[1] = item.id
-        elseif itemName:find("right arm") then
-            bundleParts[2] = item.id
-        elseif itemName:find("left arm") then
-            bundleParts[3] = item.id
-        elseif itemName:find("right leg") then
-            bundleParts[4] = item.id
-        elseif itemName:find("left leg") then
-            bundleParts[5] = item.id
-        elseif itemName:find("head") then
-            bundleParts[6] = item.id
+    -- If searching by keyword, pick a random bundle
+    if not tonumber(i) then
+        if Body.data and #Body.data > 0 then
+            local randomIndex = math.random(1, #Body.data)
+            local selectedBundleId = Body.data[randomIndex].id
+            url = "https://catalog.roblox.com/v1/bundles/" .. selectedBundleId .. "/details"
+            Response = Request() -- Fetch bundle details
+            Body = HttpService:JSONDecode(Response)
+        else
+            warn("No bundles found for keyword: " .. i)
+            return
         end
     end
-end
-        local args = {
-            [1] = "CharacterChange",
-            [2] = {bundleParts[1], bundleParts[2], bundleParts[3], bundleParts[4], bundleParts[5], bundleParts[6]},
-            [3] = "BundleChanged"
-        }
-        game:GetService("ReplicatedStorage").RE:FindFirstChild("1Avata1rOrigina1l"):FireServer(unpack(args))
-if not Body.errors then
-TextChannel:SendAsync("Bundle Found, Here Name : " .. Body.name .. "!")
-end
-if Body.errors then
-TextChannel:SendAsync("Bundle not Found Here Error" .. Body.items)
-end
+
+    if Body.errors then
+        warn("Bundle not found. Error: " .. HttpService:JSONEncode(Body.errors))
+        return
+    end
+
+    -- Initialize bundle parts
+    local bundleParts = {1, 1, 1, 1, 1, 1}
+
+    -- Populate the bundleParts table
+    if Body.items then
+        for _, item in ipairs(Body.items) do
+            local itemName = item.name:lower()
+            if itemName:find("torso") then
+                bundleParts[1] = item.id
+            elseif itemName:find("right arm") then
+                bundleParts[2] = item.id
+            elseif itemName:find("left arm") then
+                bundleParts[3] = item.id
+            elseif itemName:find("right leg") then
+                bundleParts[4] = item.id
+            elseif itemName:find("left leg") then
+                bundleParts[5] = item.id
+            elseif itemName:find("head") then
+                bundleParts[6] = item.id
+            end
+        end
+    end
+
+    local args = {
+        [1] = "CharacterChange",
+        [2] = bundleParts,
+        [3] = "BundleChanged"
+    }
+
+    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Avata1rOrigina1l"):FireServer(unpack(args))
+
+    -- Check if TextChannel exists
+    if TextChannel then
+        TextChannel:SendAsync("Bundle Found! Name: " .. Body.name)
+    end
 end
 
 -- Function to print the avatar appearance of a specific user by User ID or username
@@ -175,15 +202,9 @@ end
     end
 end
 
-function urlEncode(str)
-    return (str:gsub("([^%w])", function(c)
-        return string.format("%%%02X", string.byte(c))
-    end))
-end
-
 local historys = {}
 local function res(sc, uc)
-local r = game:HttpGetAsync("https://xiaol.pythonanywhere.com/?sc=" .. urlEncode(sc) .. "&uc=" .. urlEncode(uc))
+local r = game:HttpGetAsync("https://xiaol.pythonanywhere.com/?sc=" .. game.HttpService:UrlEncode(sc) .. "&uc=" .. game.HttpService:UrlEncode(uc))
 print(r)
 local success, data = pcall(function()
         return game.HttpService:JSONDecode(r)
