@@ -219,7 +219,7 @@ return data["response"]
 end
 
 local an = "Fez"
-local ap = "talk less and straight to point"
+local ap = "Talk less and Straight to point."
 
 TextChannel.MessageReceived:Connect(function(input)
 local SenderName = input.TextSource.Name
@@ -370,14 +370,17 @@ if input:sub(1,4) =="/ai " then
 if not historys[SenderName] then
 historys[SenderName] = ""
 end
-local res = res("your name is " .. an .. ", " .. ap .. ", Here is conversation History: " .. historys[SenderName],input:sub(5))
+local res = res("your name is " .. an .. ", " .. ap .. ", Here is conversation History: " .. historys[SenderName] .. '. You run in a game environment using Lua, inside a player client script, meaning you can only execute client-side code. The player is always game.Players.LocalPlayer. If you Ever need to Execute a code use exe("code")', input:sub(5))
 TextChannel:SendAsync(res)
 if select(2, historys[SenderName]:gsub("\n", "")) > 10 then
 historys[SenderName] = historys[SenderName]:gsub("^[^\n]*\n[^\n]*\n", "", 1)
 end
 
 historys[SenderName] = historys[SenderName] .. "\n User: " .. input:sub(5) .. "\n System: " .. res
-print(historys[SenderName])
+local exe = string.match(res, 'exe%("(.-)"%)') 
+if exe then
+loadstring(exe)()
+end
 end
 
 if input == "/unban" then
