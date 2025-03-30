@@ -218,6 +218,26 @@ return data["response"]
     end
 end
 
+local function web_search(q)
+    local results = ""
+    local res = game:HttpGetAsync("https://www.bing.com/search?q=" .. game.HttpService:UrlEncode(q))
+
+    for result in res:gmatch('<li class="b_algo".-</li>') do
+        local title = result:match('<h2>%s*<a[^>]->(.-)</a>') or "No Title"
+        local link = result:match('<h2>%s*<a href="(.-)"') or "No Link"
+        local description = result:match('<p.->(.-)</p>') or "No Description"
+
+        local formatted_result = string.format(
+            "Title: %s\nLink: %s\nDescription: %s",
+            title, link, description
+        )
+
+        results = results .. "\n" .. formatted_result
+    end
+
+    return results
+end
+
 local an = "Fez"
 local ap = "Talk less and Straight to point."
 
@@ -370,16 +390,22 @@ if input:sub(1,4) =="/ai " then
 if not historys[SenderName] then
 historys[SenderName] = ""
 end
-local res = res("your name is " .. an .. ", " .. ap .. ", Here is conversation History: " .. historys[SenderName] .. '. You run in a game environment using Lua, inside a player client script, meaning you can only execute client-side code. The player is always game.Players.LocalPlayer. If you Ever need to Execute a code use exe("code")', input:sub(5))
-TextChannel:SendAsync(res)
+local response = res("your name is " .. an .. ", " .. ap .. ", Here is conversation History: " .. historys[SenderName] .. '. if you need to search web to get data that you dont have type web_search("query")', input:sub(5))
+TextChannel:SendAsync(response)
 if select(2, historys[SenderName]:gsub("\n", "")) > 10 then
 historys[SenderName] = historys[SenderName]:gsub("^[^\n]*\n[^\n]*\n", "", 1)
 end
 
-historys[SenderName] = historys[SenderName] .. "\n User: " .. input:sub(5) .. "\n System: " .. res
-local exe = string.match(res, 'exe%("(.-)"%)') 
-if exe then
-loadstring(exe)()
+historys[SenderName] = historys[SenderName] .. "\n User: " .. input:sub(5) .. "\n System: " .. response
+local q = string.match(response, 'web_search%("(.-)"%)') 
+if q then
+local result = web_search(q)
+if result == "" then
+result = "No result found for: " .. q
+end
+local response = res("user will give you web info say the info but very short like 1 line max and if there are bad words like butt replace it with something respectfull like curves or just a emoji as 🍑", result)
+TextChannel:SendAsync(response)
+historys[SenderName] = historys[SenderName] .. "\n User: " .. input:sub(5) .. "\n System: " .. response
 end
 end
 
