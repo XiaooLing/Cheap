@@ -399,7 +399,7 @@ local result = web_search(q)
 if result == "" then
 result = "No result found for: " .. q
 end
-local response = res("user will give you web info say the info but very short like 1 line max and if there are bad words like butt replace it with something respectfull like curves or just a emoji as 🍑", )
+response = res("user will give you web info say the info but very short like 1 line max and if there are bad words like butt replace it with something respectfull like curves or just a emoji as 🍑", result)
 end
 
 TextChannel:SendAsync(response)
@@ -429,4 +429,4 @@ end
 if input == "/dh" then
 historys[SenderName] = ""
 end
-end) format it no any changes
+end)
